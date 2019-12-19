@@ -1,4 +1,5 @@
 local restartList = {}
+local restartKey = "F5"
 
 local function about(player)
 	AddPlayerChat(player, [[
@@ -173,6 +174,26 @@ local function restart_list(player)
 	end
 end
 
+local function get(player, var)
+	if var == "restart-list" then
+		if #restartList == 0 then
+			AddPlayerChat(player, "[pkg] The restart-list is empty. Set it with /pkg set restart-list <packages>")
+		else
+			AddPlayerChat(player, "[pkg] Packages in the restart-list:")
+			for _, v in pairs(restartList) do
+				AddPlayerChat(player, "[pkg] + "..v)
+			end
+		end
+	elseif var == "restart-key" then
+		if restartKey == "" or restartKey == nil then
+			AddPlayerChat(player, "[pkg] The restart-key is not set. Set it with /pkg set restart-key F5")
+		else
+			AddPlayerChat(player, '[pkg] The restart-key is "'..restartKey..'"')
+		end
+	else
+		AddPlayerChat(player, "[pkg] "..helps["get"])
+	end
+end
 
 local cmds = {
 	["about"] = about,
