@@ -80,6 +80,31 @@ local function start(player, ...)
 	end
 end
 
+local function stop(player, ...)
+	local pkgs = {...}
+
+	if #pkgs == 0 then
+		AddPlayerChat(player, "[pkg] "..helps["stop"])
+	else
+		for _, v in pairs(pkgs) do
+			if v == GetPackageName() then
+				AddPlayerChat(player, '[pkg] Skipped "'..v..'" because a package can not stop itself')
+			else
+				if IsPackageStarted(v) then
+					if StopPackage(v) then
+						AddPlayerChat(player, '[pkg] Stopped "'..v..'"')
+					else
+						AddPlayerChat(player, '[pkg] Failed stopping "'..v..'"')
+					end
+				else
+					AddPlayerChat(player, '[pkg] Package "'..v..'" is already stopped')
+				end
+			end
+		end
+	end
+end
+
+
 local cmds = {
 	["about"] = about,
 
