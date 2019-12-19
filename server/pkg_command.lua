@@ -1,6 +1,27 @@
 local restartList = {}
 local restartKey = "F5"
 
+function GetAllInstalledPackages()
+	local pfile = nil
+	local iterator = nil
+	local pkgs = {}
+
+	if package.config:sub(1,1) == "\\" then -- Windows
+		pfile = io.popen('dir /ad /b packages')
+		iterator = pfile:lines()
+	else -- elseif package.config:sub(1,1) == "/" then -- Unix / Other
+		pfile = io.popen('find "'.."packages"..'" -maxdepth 1 -printf \'%P\\0\' -type d')
+		iterator = pfile:read("*a"):gmatch('[^\0]+')
+	end
+
+	for dir in iterator do
+		table.insert(pkgs, dir)
+	end
+
+	pfile:close()
+	return pkgs
+end
+
 local function about(player)
 	AddPlayerChat(player, [[
 [pkg] ----------------------------------
@@ -27,7 +48,7 @@ local helps_sorted = {
 
 local helps = {
 	["help"] = "/pkg help [cmd] | Print help about commands",
-	["list"] = "/pkg list | List all started packages",
+	["list"] = "/pkg list [<started|stopped>] | List all started packages",
 	["info"] = "/pkg info <packages> | Get informations about one or more package(s)",
 	["start"] = "/pkg start <packages> | Start one or more package(s)",
 	["stop"] = "/pkg stop <packages> | Stop one or more package(s)",
@@ -52,10 +73,26 @@ local function help(player, cmd)
 end
 
 
-local function list(player)
-	AddPlayerChat(player, "[pkg] Started packages list:")
-	for _, v in pairs(GetAllPackages()) do
-		AddPlayerChat(player, "[pkg] + "..v)
+local function list(player, status)
+	if status == nil then
+		AddPlayerChat(player, "[pkg] Packages list (+ started, - stopped):")
+		for _, v in pairs(GetAllInstalledPackages()) do
+			AddPlayerChat(player, "[pkg] "..(IsPackageStarted(v) and "+ " or "- ")..v)
+		end
+	elseif status == "started" or status == "start" or status == "+" then
+		AddPlayerChat(player, "[pkg] Started packages list:")
+		for _, v in pairs(GetAllPackages()) do
+			AddPlayerChat(player, "[pkg] + "..v)
+		end
+	elseif status == "stopped" or status == "stop" or status == "-" then
+		AddPlayerChat(player, "[pkg] Stopped packages list:")
+		for _, v in pairs(GetAllInstalledPackages()) do
+			if IsPackageStarted(v) == false then
+				AddPlayerChat(player, "[pkg] - "..v)
+			end
+		end
+	else
+		AddPlayerChat(player, "[pkg] "..helps["list"])
 	end
 end
 

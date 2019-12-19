@@ -3,7 +3,7 @@ An [Onset](https://playonset.com) package utility. Also check [alexandregv/Onset
 
 ## Commands
 - `/pkg help`: Print usage information
-- `/pkg list`: List all packages on the server
+- `/pkg list [<started|stopped>]`: List all packages on the server
 - `/pkg info <packages>`: Get informations about one or more package(s)
 - `/pkg start <packages>`: Start one or more package(s)
 - `/pkg stop <packages>`: Stop one or more package(s)
@@ -31,7 +31,9 @@ Because I know you are a lazy person, these words can be replaced by their alias
 - `restart-key` == `rk`
 
 ## Examples
-- `/pkg i roleplay`: Prints infos about the "roleplay" package
+- `/pkg list`: Prints all installed packages
+- `/pkg l started`: Prints all started packages
+- `/pkg info roleplay`: Prints infos about the "roleplay" package
 - `/pkg start setupmap roleplay debug`: Starts the "setupmap", "roleplay" and "debug" packages
 - `/pkg - setupmap`: Stops the "setupmap" package
 - `/pkg restart roleplay`: Restarts the "roleplay" package
