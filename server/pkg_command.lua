@@ -48,10 +48,35 @@ local function help(player, cmd)
 	end
 end
 
+
 local function list(player)
 	AddPlayerChat(player, "[pkg] Started packages list:")
 	for _, v in pairs(GetAllPackages()) do
 		AddPlayerChat(player, "[pkg] + "..v)
+	end
+end
+
+local function start(player, ...)
+	local pkgs = {...}
+
+	if #pkgs == 0 then
+		AddPlayerChat(player, "[pkg] "..helps["start"])
+	else
+		for _, v in pairs(pkgs) do
+			if v == GetPackageName() then
+				AddPlayerChat(player, '[pkg] Skipped "'..v..'" because a package can not start itself')
+			else
+				if IsPackageStarted(v) then
+					AddPlayerChat(player, '[pkg] Package "'..v..'" is already started')
+				else
+					if StartPackage(v) then
+						AddPlayerChat(player, '[pkg] Started "'..v..'"')
+					else
+						AddPlayerChat(player, '[pkg] Failed starting "'..v..'"')
+					end
+				end
+			end
+		end
 	end
 end
 
