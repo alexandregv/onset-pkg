@@ -2,7 +2,7 @@
 	"author": "alexandregv",
 	"version": "1.0.0",
 	"server_scripts": [
-		"server/reload.lua"
+		"server/pkg_command.lua"
 	],
 	"client_scripts": [
 		"client/keypress.lua"
