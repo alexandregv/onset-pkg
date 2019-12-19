@@ -1,0 +1,12 @@
+{
+	"author": "alexandregv",
+	"version": "1.0.0",
+	"server_scripts": [
+		"server/reload.lua"
+	],
+	"client_scripts": [
+		"client/keypress.lua"
+	],
+	"files": [
+	]
+}
