@@ -107,33 +107,8 @@ local function stop(player, ...)
 	end
 end
 
-local function restart(player, ...)
-	local pkgs = {...}
-
-	if #pkgs == 0 then
-		AddPlayerChat(player, "[pkg] "..helps["restart"])
-	else
-		for _, v in pairs(pkgs) do
-			if v == GetPackageName() then
-				AddPlayerChat(player, '[pkg] Skipped "'..v..'" because a package can not restart itself')
-			else
-				if StopPackage(v) ~= true then
-					AddPlayerChat(player, '[pkg] Failed stopping "'..v..'"')
-				end
-				Delay(100, function()
-					if StartPackage(v) then
-						AddPlayerChat(player, '[pkg] Restarted "'..v..'"')
-					else
-						AddPlayerChat(player, '[pkg] Failed starting "'..v..'"')
-					end
-				end )
-			end
-		end
-	end
-end
-
-local function restart_all(player)
-	for _, v in pairs(GetAllPackages()) do
+local function restart_packages(player, pkgs)
+	for _, v in pairs(pkgs) do
 		if v == GetPackageName() then
 			AddPlayerChat(player, '[pkg] Skipped "'..v..'" because a package can not restart itself')
 		else
@@ -151,26 +126,25 @@ local function restart_all(player)
 	end
 end
 
+local function restart(player, ...)
+	local pkgs = {...}
+
+	if #pkgs == 0 then
+		AddPlayerChat(player, "[pkg] "..helps["restart"])
+	else
+		restart_packages(player, pkgs)
+	end
+end
+
+local function restart_all(player)
+	restart_packages(player, GetAllPackages())
+end
+
 local function restart_list(player)
 	if #restartList == 0 then
-		AddPlayerChat(player, "[pkg] The restart-list is empty. Set it with /pkg set restart-list <packages>")
+		restart_all(player)
 	else
-		for _, v in pairs(restartList) do
-			if v == GetPackageName() then
-				AddPlayerChat(player, '[pkg] Skipped "'..v..'" because a package can not restart itself')
-			else
-				if StopPackage(v) ~= true then
-					AddPlayerChat(player, '[pkg] Failed stopping "'..v..'"')
-				end
-				Delay(100, function()
-					if StartPackage(v) then
-						AddPlayerChat(player, '[pkg] Restarted "'..v..'"')
-					else
-						AddPlayerChat(player, '[pkg] Failed starting "'..v..'"')
-					end
-				end )
-			end
-		end
+		restart_packages(player, restartList)
 	end
 end
 
@@ -185,7 +159,7 @@ end )
 local function get(player, var)
 	if var == "restart-list" then
 		if #restartList == 0 then
-			AddPlayerChat(player, "[pkg] The restart-list is empty. Set it with /pkg set restart-list <packages>")
+			AddPlayerChat(player, '[pkg] The restart-list is empty, meaning all packages will be restarted')
 		else
 			AddPlayerChat(player, "[pkg] Packages in the restart-list:")
 			for _, v in pairs(restartList) do
@@ -209,7 +183,7 @@ local function set(player, var, ...)
 	if var == "restart-list" then
 		restartList = {}
 		if #values == 0 then
-			AddPlayerChat(player, '[pkg] The restart-list has been emptied')
+			AddPlayerChat(player, '[pkg] The restart-list has been emptied, meaning all packages will be restarted')
 		else
 			for _, v in pairs(values) do
 				if v ~= GetPackageName() then
