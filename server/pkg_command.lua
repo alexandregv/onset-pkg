@@ -129,6 +129,25 @@ local function restart(player, ...)
 	end
 end
 
+local function restart_all(player)
+	for _, v in pairs(GetAllPackages()) do
+		if v == GetPackageName() then
+			AddPlayerChat(player, '[pkg] Skipped "'..v..'" because a package can not restart itself')
+		else
+			if StopPackage(v) ~= true then
+				AddPlayerChat(player, '[pkg] Failed stopping "'..v..'"')
+			end
+			Delay(100, function()
+				if StartPackage(v) then
+					AddPlayerChat(player, '[pkg] Restarted "'..v..'"')
+				else
+					AddPlayerChat(player, '[pkg] Failed starting "'..v..'"')
+				end
+			end )
+		end
+	end
+end
+
 
 local cmds = {
 	["about"] = about,
