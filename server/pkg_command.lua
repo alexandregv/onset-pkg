@@ -1,3 +1,14 @@
+local function about(player)
+	AddPlayerChat(player, [[
+[pkg] ----------------------------------
+[pkg] pkg v2.0.0 by alexandregv
+[pkg] https://github.com/alexandregv/Onset-pkg
+[pkg] https://github.com/alexandregv/OnsetPackages
+[pkg] Need help? /pkg help
+[pkg] ----------------------------------
+]])
+end
+
 local cmds = {
 	["about"] = about,
 
