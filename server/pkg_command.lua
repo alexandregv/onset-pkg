@@ -1,3 +1,5 @@
+json = require "packages/pkg/thirdparty/json"
+
 local restartList = {}
 local restartKey = "F5"
 
@@ -93,6 +95,22 @@ local function list(player, status)
 		end
 	else
 		AddPlayerChat(player, "[pkg] "..helps["list"])
+	end
+end
+
+local function info(player, ...)
+	local pkgs = {...}
+
+	if #pkgs == 0 then
+		info(player, table.unpack(GetAllInstalledPackages()))
+	else
+		AddPlayerChat(player, "[pkg] Packages informations:")
+		for _, v in pairs(pkgs) do
+			local fd, err = io.open("packages/"..v.."/package.json", "rb")
+			local parsed = json.decode(fd:read("*a"))
+			fd:close()
+			AddPlayerChat(player, "[pkg] "..v.." v"..parsed["version"].." by "..parsed["author"]..(IsPackageStarted(v) and " [started]" or " [stopped]"))
+		end
 	end
 end
 
