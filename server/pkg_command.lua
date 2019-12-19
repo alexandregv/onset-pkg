@@ -24,7 +24,7 @@ local helps_sorted = {
 
 local helps = {
 	["help"] = "/pkg help [cmd] | Print help about commands",
-	["list"] = "/pkg list | List all packages on the server",
+	["list"] = "/pkg list | List all started packages",
 	["info"] = "/pkg info <packages> | Get informations about one or more package(s)",
 	["start"] = "/pkg start <packages> | Start one or more package(s)",
 	["stop"] = "/pkg stop <packages> | Stop one or more package(s)",
@@ -45,6 +45,13 @@ local function help(player, cmd)
 		AddPlayerChat(player, "[pkg] "..help)
 	else
 		AddPlayerChat(player, "[pkg] "..helps["help"])
+	end
+end
+
+local function list(player)
+	AddPlayerChat(player, "[pkg] Started packages list:")
+	for _, v in pairs(GetAllPackages()) do
+		AddPlayerChat(player, "[pkg] + "..v)
 	end
 end
 
