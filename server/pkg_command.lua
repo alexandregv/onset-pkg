@@ -174,6 +174,14 @@ local function restart_list(player)
 	end
 end
 
+AddRemoteEvent("pkg:restart-list", function(player)
+	restart_list(player)
+end )
+
+AddEvent("OnPlayerJoin", function(player)
+	CallRemoteEvent(player, "pkg:set-restartKey", restartKey)
+end )
+
 local function get(player, var)
 	if var == "restart-list" then
 		if #restartList == 0 then
@@ -194,6 +202,39 @@ local function get(player, var)
 		AddPlayerChat(player, "[pkg] "..helps["get"])
 	end
 end
+
+local function set(player, var, ...)
+	local values = {...}
+
+	if var == "restart-list" then
+		restartList = {}
+		if #values == 0 then
+			AddPlayerChat(player, '[pkg] The restart-list has been emptied')
+		else
+			for _, v in pairs(values) do
+				if v ~= GetPackageName() then
+					table.insert(restartList, v)
+				end
+			end
+		AddPlayerChat(player, "[pkg] New packages added to the restart-list. Check it with /pkg get restart-list")
+		end
+	elseif var == "restart-key" then
+		if values[1] == nil or values[1] == "" then
+			restartKey = ""
+			for _, v in pairs(GetAllPlayers()) do
+				CallRemoteEvent(v, "pkg:set-restartKey", "nil")
+			end
+			AddPlayerChat(player, '[pkg] The restart-key has been unset')
+		else
+			restartKey = values[1]
+			for _, v in pairs(GetAllPlayers()) do
+				CallRemoteEvent(v, "pkg:set-restartKey", restartKey)
+			end
+			AddPlayerChat(player, '[pkg] The restart-key has been set to "'..restartKey..'"')
+		end
+	end
+end
+
 
 local cmds = {
 	["about"] = about,
