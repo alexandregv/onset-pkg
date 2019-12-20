@@ -212,7 +212,7 @@ AddEvent("OnPlayerJoin", function(player)
 end )
 
 local function get(player, var)
-	if var == "restart-list" then
+	if var == "restart-list" or var == "rl" then
 		if #restartList == 0 then
 			AddPlayerChat(player, '[pkg] The restart-list is empty, meaning all packages will be restarted')
 		else
@@ -221,7 +221,7 @@ local function get(player, var)
 				AddPlayerChat(player, "[pkg] + "..v)
 			end
 		end
-	elseif var == "restart-key" then
+	elseif var == "restart-key" or var == "rk" then
 		if restartKey == "" or restartKey == nil then
 			AddPlayerChat(player, "[pkg] The restart-key is not set. Set it with /pkg set restart-key F5")
 		else
@@ -235,7 +235,7 @@ end
 local function set(player, var, ...)
 	local values = {...}
 
-	if var == "restart-list" then
+	if var == "restart-list" or var == "rl" then
 		restartList = {}
 		if #values == 0 then
 			AddPlayerChat(player, '[pkg] The restart-list has been emptied, meaning all packages will be restarted')
@@ -247,7 +247,7 @@ local function set(player, var, ...)
 			end
 		AddPlayerChat(player, "[pkg] New packages added to the restart-list. Check it with /pkg get restart-list")
 		end
-	elseif var == "restart-key" then
+	elseif var == "restart-key" or var == "rk" then
 		if values[1] == nil or values[1] == "" then
 			restartKey = ""
 			for _, v in pairs(GetAllPlayers()) do
