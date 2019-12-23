@@ -1,5 +1,8 @@
 # Onset-pkg
-An [Onset](https://playonset.com) package utility. Also check [alexandregv/OnsetPackages](https://github.com/alexandregv/OnsetPackages)
+An [Onset](https://playonset.com) package utility to manage your packages in-game.  
+Also check: 
+- [alexandregv/OnsetPackages](https://github.com/alexandregv/OnsetPackages): a list of all my packages
+- [alexandregv/awesome-onset](https://github.com/alexandregv/awesome-onset): an awesome list of all the bests packages
 
 ## Commands
 - `/pkg help`: Print usage information
